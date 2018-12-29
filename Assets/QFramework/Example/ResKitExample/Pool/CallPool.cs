@@ -23,70 +23,37 @@
  * THE SOFTWARE.
  ****************************************************************************/
 
+using System.Collections.Generic;
 using UnityEngine;
+using QFramework;
+using UniRx;
 
-namespace QFramework
-{
-    public class CallPool : MonoBehaviour
+public class CallPool : MonoBehaviour {
+
+    void Awake()
     {
-        class Fish
-        {
-            
-        }
-        
-        private void Start()
-        {
-            #region SimpleObjectPool
-            var pool = new SimpleObjectPool<Fish>(() => new Fish(),initCount:50);
-            
-            pool.CurCount.LogInfo();
-
-            var fish = pool.Allocate();
-            
-            pool.CurCount.LogInfo();
-
-            pool.Recycle(fish);
-         
-            pool.CurCount.LogInfo();
-            #endregion
-
-
-
-            #region SafeObjectPool
-
-            SafeObjectPool<Bullet>.Instance.Init(50,25);
-            
-            var bullet = Bullet.Allocate();
-
-            SafeObjectPool<Bullet>.Instance.CurCount.LogInfo();
-            
-            bullet.Recycle2Cache();
-            
-            SafeObjectPool<Bullet>.Instance.CurCount.LogInfo();
-
-            #endregion
-        }
         
         
-        class Bullet :IPoolable,IPoolType
-        {
-            public void OnRecycled()
-            {
-                "回收了".LogInfo();
-            }
-
-            public  bool IsRecycled { get; set; }
-
-            public static Bullet Allocate()
-            {
-                return SafeObjectPool<Bullet>.Instance.Allocate();
-            }
-            
-            public void Recycle2Cache()
-            {
-                SafeObjectPool<Bullet>.Instance.Recycle(this);
-            }
-        }
-
+        
+        
     }
+//    List<PoolTest> mObjList = new List<PoolTest>();
+//
+//    private void Start()
+//    {
+//        this.Repeat()
+//            .Until(() => { return Input.GetKeyDown(KeyCode.Space); })
+//            .Event(() =>
+//            {
+//                var temp = SafeObjectPool<PoolTest>.Instance.Allocate();
+//                temp.DebugIndex();
+//                mObjList.Add(temp);
+//            })
+//            .Begin();
+//
+//        Observable.EveryUpdate()
+//            .Where(x => Input.GetKeyDown(KeyCode.C) && mObjList.Count > 0)
+//            .Subscribe(_ => { SafeObjectPool<PoolTest>.Instance.Recycle(mObjList[0]); mObjList.RemoveAt(0); Debug.Log("回收"); });
+//
+//    }
 }
